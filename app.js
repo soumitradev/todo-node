@@ -3,10 +3,13 @@ const cors = require('cors');
 const { nanoid } = require('nanoid');
 const mongoose = require('mongoose');
 
+// Why did I not do this before
+require('dotenv').config()
+
 const port = 3000;
 const app = express();
 
-mongoose.connect('mongodb+srv://soumitradev:Ghx46t2ayHAb2UA@todoapp.0zonn.gcp.mongodb.net/todo_data?retryWrites=true&w=majority', {
+mongoose.connect(`mongodb+srv://soumitradev:${process.env.MONGO_PSWD}@todoapp.0zonn.gcp.mongodb.net/todo_data?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
