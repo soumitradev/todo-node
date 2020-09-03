@@ -1,0 +1,9 @@
+body {
+    max-width: 70em;
+    margin: 0 auto;
+}
+
+
+input:checked + input {
+    text-decoration: line-through;
+}

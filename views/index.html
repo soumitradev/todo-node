@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo App</title>
+</head>
+
+<body>
+  <h1>Welcome to the badly named ToDo App!</h1>
+  <div class="todo-landing-card">
+    <form action="" method="POST" class="todo-form" id="landing-todo">
+      <div class="title-div">
+        <input for="title" id="todo-title-input" placeholder="Add Title..." type="text">
+      </div>
+      <div class="desc-div">
+        <input for="desc" id="todo-desc-input" placeholder="Description..." type="text">
+      </div>
+      <div class="tasks">
+        <ul class="task-list">
+          <div class="task" id="task-div-1">
+            <input type="checkbox" class="task-check" id="task-checkbox-1"><input type="text" class="task-text"
+              placeholder="Task" id="last-active-input"><button type="button" class="add-task-button"
+              id="add-task-button">Save</button>
+          </div>
+        </ul>
+      </div>
+    </form>
+  </div>
+</body>
+<link rel="stylesheet" type="text/css" href="./styles/fonts.css">
+<link rel="stylesheet" type="text/css" href="./styles/styles.css">
+<script src="./scripts/landing.js"></script>
+
+</html>
