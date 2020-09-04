@@ -3,7 +3,7 @@ var add_task_button = document.getElementById('add-task-button');
 var last_active_input = document.getElementById('last-active-input');
 var id = undefined;
 
-var num_tasks = 1;
+var num_tasks = 0;
 
 var pageURL = window.location.href;
 var id = pageURL.substr(pageURL.lastIndexOf('/') + 1);
@@ -15,9 +15,52 @@ async function getTodo() {
         method: 'GET',
     });
     js = await res.json();
-    title_text_input.value = js.title;
     document.getElementById('todo-title-input').value = js.title;
-    document.getElementById('todo-desc-input').value = js.title;
+    document.getElementById('todo-desc-input').value = js.desc;
+    js.tasks.forEach(task => {
+        let task_input = document.createElement("input");
+        let task_checkbox = document.createElement("input");
+
+        task_input.type = "text";
+        task_input.className = "task-text";
+        task_input.value = task.body;
+
+        task_checkbox.type = "checkbox";
+        task_checkbox.className = "task-check";
+        task_checkbox.checked = task.done;
+
+        num_tasks += 1
+        
+        let task_div = document.createElement("div");
+        task_div.className = "task";
+
+        task_div.id = "task-div-" + num_tasks;
+        task_checkbox.id = "task-checkbox-" + num_tasks;
+
+        task_div.appendChild(task_checkbox);
+        task_div.appendChild(task_input);
+
+        document.querySelector(".task-list").appendChild(task_div);
+    });
+
+    document.querySelector(".task-list").lastChild.lastChild.id = "last-active-input";
+
+    let task_button = document.createElement("button");
+
+    task_button.className = "add-task-button";
+    task_button.type = "button";
+    task_button.id = "add-task-button";
+    task_button.innerHTML = "+";
+    task_button.addEventListener('click', add_task, true);
+
+
+    document.getElementById('last-active-input').addEventListener('keyup', (event) => {
+        if (event.code == "Enter" && document.getElementById('last-active-input') == document.activeElement) add_task();
+    }, true);
+
+    document.querySelector(".task-list").lastChild.appendChild(task_button);
+
+
     // Get details of todo and display
 }
 
@@ -41,6 +84,7 @@ async function generatePayload() {
         tasks: tasks,
         id: id,
     }
+    return payload;
 }
 
 async function updateTodo() {
@@ -54,7 +98,7 @@ async function updateTodo() {
 
 async function add_task() {
     // Other shit
-    await updateTodo();
+    // await updateTodo();
     let task_input = document.createElement("input");
     let task_checkbox = document.createElement("input");
     let task_button = document.createElement("button");
@@ -69,7 +113,7 @@ async function add_task() {
     task_button.className = "add-task-button";
     task_button.type = "button";
     task_button.id = "add-task-button";
-    task_button.innerHTML = "Save";
+    task_button.innerHTML = "+";
     task_button.addEventListener('click', add_task, true);
 
     document.getElementById('last-active-input').removeEventListener('keyup', add_task, true);
@@ -97,7 +141,17 @@ async function add_task() {
 }
 
 addEventListener('load', getTodo, true);
-add_task_button.addEventListener('click', add_task, true);
-last_active_input.addEventListener('keyup', (event) => {
-    if (event.code == "Enter" && last_active_input == document.activeElement) add_task();
+
+document.getElementById('save-button').addEventListener('click', updateTodo, true);
+
+document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => {
+    var copyText = document.getElementById("todo-link");
+    /* Select the text field */
+    copyText.focus();
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+    /* Copy the text inside the text field */
+    console.log(document.execCommand("copy"));
+    console.log('oook');
 }, true);

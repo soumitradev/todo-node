@@ -1,115 +1,92 @@
-var title_text_input = document.getElementById('landing-todo');
-var add_task_button = document.getElementById('add-task-button');
-var last_active_input = document.getElementById('last-active-input');
-var id = undefined;
+var todoModel = require("../models/todoModel");
+const { nanoid } = require('nanoid');
 
-var num_tasks = 1;
-
-async function prefill_title_date() {
-    await new Promise(r => setTimeout(r, 3000));
-    let today = new Date();
-    let mnthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    let year = today.getFullYear();
-    let mnth = mnthNames[today.getMonth()];
-    let dat = today.getDate();
-    document.getElementById('todo-title-input').value = mnth + " " + dat + ", " + year;
-    await createTodo();
+// TODO Move endpoints to routes/
+exports.home_get = async function home_get(req, res) {
+    res.render('home');
 }
 
-async function generatePayload(updating) {
-    let listItems = document.querySelector(".task-list").children;
-    let tasks = [];
-    for (let i = 0; i < listItems.length; i++) {
-        const taskDivChildren = listItems[i].children;
-        let task = {
-            body: taskDivChildren[1].value,
-            done: taskDivChildren[0].checked
+exports.create_todo = async function create_todo(req, res) {
+    let title = req.body.title;
+    let desc = req.body.desc;
+    let tasks = req.body.tasks;
+    let id = req.body.id;
+    // User can specify id
+    try {
+        if (!id) {
+            id = nanoid(10);
+            while (await todoModel.findById(id)) {
+                id = nanoid(10);
+            }
+        } else {
+            if (await todoModel.findById(id)) {
+                return res.status(400).json({
+                    status: 'error',
+                    error: 'id already taken',
+                });
+            }
         }
-        tasks.push(task);
+
+        let todo = new todoModel({
+            title: title,
+            desc: desc,
+            tasks: tasks,
+            _id: id,
+        });
+
+        var added = await todo.save();
+        res.status(201).json(added);
+    } catch (err) {
+        res.status(400).json(err);
     }
-    title = document.getElementById("todo-title-input").value;
-    desc = document.getElementById("todo-desc-input").value;
+}
 
-    payload = {
-        title: title,
-        desc: desc,
-        tasks: tasks,
+exports.todo_get = async function get_todo(req, res) {
+    let id = req.params.id;
+    try {
+        const doc = await todoModel.findById(id);
+        if (!doc) return res.status(404).render();
+        return res.render('view');
+    } catch (err) {
+        return res.status(500).json(err);
     }
+}
 
-    if (updating && id) {
-        payload.id = id;
+exports.update_todo = async function update_todo(req, res) {
+    let title = req.body.title;
+    let desc = req.body.desc;
+    let tasks = req.body.tasks;
+    let id = req.body.id;
+
+    try {
+        const doc = await todoModel.findById(id);
+        if (!doc) return res.status(404).json({ message: 'Todo list not found' });
+
+        title = title ? title : doc.title;
+        desc = desc ? desc : doc.desc;
+        tasks = tasks ? tasks : doc.tasks;
+
+        let todo = new todoModel({
+            title: title,
+            desc: desc,
+            tasks: tasks,
+            _id: id,
+        });
+        upd = await doc.updateOne(todo);
+        res.status(200).json(todo);
+    } catch (err) {
+        return res.status(500).json(err);
     }
-
-    return payload;
 }
 
-async function createTodo() {
-    // Get data and save
-    let res = await fetch('http://localhost:3000/api/v1/todo', {
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        method: 'POST',
-        body: JSON.stringify(await generatePayload(false)),
-    });
-    js = await res.json();
-    id = js._id;
-    console.log(id);
+
+exports.delete_todo = async function delete_todo(req, res) {
+    let id = req.params.id;
+    try {
+        const doc = await todoModel.findByIdAndDelete(id);
+        if (!doc) return res.status(404).json({ message: 'Todo list not found' });
+        return res.status(200).json(doc);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
 }
-
-async function updateTodo() {
-    // Get data and save
-    let res = await fetch('http://localhost:3000/api/v1/todo', {
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        method: 'PUT',
-        body: JSON.stringify(await generatePayload(true)),
-    });
-}
-
-async function add_task() {
-    // Other shit
-    await updateTodo();
-    let task_input = document.createElement("input");
-    let task_checkbox = document.createElement("input");
-    let task_button = document.createElement("button");
-
-    task_input.type = "text";
-    task_input.className = "task-text";
-    task_input.placeholder = "Task";
-
-    task_checkbox.type = "checkbox";
-    task_checkbox.className = "task-check";
-
-    task_button.className = "add-task-button";
-    task_button.type = "button";
-    task_button.id = "add-task-button";
-    task_button.innerHTML = "Save";
-    task_button.addEventListener('click', add_task, true);
-
-    document.getElementById('last-active-input').removeEventListener('keyup', add_task, true);
-    document.getElementById('last-active-input').id = "task-input-" + num_tasks;
-    task_input.id = 'last-active-input';
-    num_tasks += 1;
-    task_input.addEventListener('keyup', (event) => {
-        if (event.code == "Enter" && document.getElementById('last-active-input') == document.activeElement) add_task();
-    }, true);
-
-    let task_div = document.createElement("div");
-    task_div.className = "task";
-
-    task_div.id = "task-div-" + num_tasks;
-    task_checkbox.id = "task-checkbox-" + num_tasks;
-
-    task_div.appendChild(task_checkbox);
-    task_div.appendChild(task_input);
-    task_div.appendChild(task_button);
-
-    document.querySelector(".add-task-button").remove();
-    document.querySelector(".task-list").appendChild(task_div);
-
-    document.getElementById('last-active-input').focus();
-}
-
-addEventListener('load', prefill_title_date, true);
-add_task_button.addEventListener('click', add_task, true);
-last_active_input.addEventListener('keyup', (event) => {
-    if (event.code == "Enter" && last_active_input == document.activeElement) add_task();
-}, true);
