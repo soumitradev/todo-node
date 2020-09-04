@@ -4,17 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ToDo App</title>
+  <title>Todo App</title>
 </head>
 
 <body>
-  <h1>Welcome to the badly named ToDo App!</h1>
+  <h1><a href="../../">Todo</a></h1>
   <div class="todo-landing-card">
     <form action="/api/v1/todo" method="PUT" class="todo-form" id="landing-todo">
       <div class="title-div">
+        <label for="todo-title-input">Title</label><br>
         <input id="todo-title-input" placeholder="Add Title..." type="text">
-      </div>
+      </div><br>
       <div class="desc-div">
+        <label for="todo-title-input">Description</label><br>
         <input id="todo-desc-input" placeholder="Description..." type="text">
       </div>
       <div class="tasks">
@@ -22,7 +24,8 @@
         </ul>
       </div>
       <button type="button" class="save-button" id="save-button">Save</button>
-    </form>
+      <button type="button" class="delete-button" id="delete-button">Delete</button>
+    </form><br><br>
     <div class="link-div">
       <input type="text" id="todo-link" class="copy-link-field" readonly><button type="button" class="copy-link-btn"
         id="copy-todo-link-btn">Copy Link</button>

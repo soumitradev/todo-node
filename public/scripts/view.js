@@ -9,8 +9,9 @@ var pageURL = window.location.href;
 var id = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 
 async function getTodo() {
+    document.getElementById("todo-link").value = window.location.href;
     // Get data and save
-    let res = await fetch('http://localhost:3000/api/v1/todo/' + id, {
+    let res = await fetch('../api/v1/todo/' + id, {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'GET',
     });
@@ -89,11 +90,20 @@ async function generatePayload() {
 
 async function updateTodo() {
     // Get data and save
-    let res = await fetch('http://localhost:3000/api/v1/todo', {
+    let res = await fetch('../api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
         body: JSON.stringify(await generatePayload()),
     });
+}
+
+async function deleteTodo() {
+    // Get data and save
+    let res = await fetch('../api/v1/todo/' + id, {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'DELETE',
+    });
+    location.href = '../..';
 }
 
 async function add_task() {
@@ -155,3 +165,5 @@ document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => 
     console.log(document.execCommand("copy"));
     console.log('oook');
 }, true);
+
+document.getElementById('delete-button').addEventListener('click', deleteTodo, true);

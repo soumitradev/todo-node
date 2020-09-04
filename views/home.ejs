@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ToDo App</title>
+  <title>Todo App</title>
 </head>
 
 <body>
-  <h1>Welcome to the badly named ToDo App!</h1>
+  <h1><a href=".">Todo</a></h1>
   <div class="todo-landing-card">
     <form action="/api/v1/todo" method="PUT" class="todo-form" id="landing-todo">
       <div class="title-div">
@@ -22,17 +22,18 @@
       <div class="tasks">
         <ul class="task-list">
           <div class="task" id="task-div-1">
-            <input type="checkbox" class="task-check" id="task-checkbox-1" name="tasks[][done]"><input type="text"
-              class="task-text" placeholder="Task" id="last-active-input" name="tasks[][body]"><button type="button"
-              class="add-task-button" id="add-task-button">+</button>
+            <input type="checkbox" class="task-check" id="task-checkbox-1"><input type="text" class="task-text"
+              placeholder="Task" id="last-active-input"><button type="button" class="add-task-button"
+              id="add-task-button">+</button>
           </div>
         </ul>
       </div>
       <button type="button" class="save-button" id="save-button">Save</button>
+      <button type="button" class="delete-button" id="delete-button">Delete</button>
     </form><br><br>
     <div class="link-div">
-      <input type="text" id="todo-link" class="copy-link-field" readonly placeholder="Generating unique link..."><button type="button" class="copy-link-btn"
-        id="copy-todo-link-btn">Copy Link</button>
+      <input type="text" id="todo-link" class="copy-link-field" readonly placeholder="Generating unique link..."><button
+        type="button" class="copy-link-btn" id="copy-todo-link-btn">Copy Link</button>
     </div>
   </div>
 </body>

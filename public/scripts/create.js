@@ -58,6 +58,15 @@ async function createTodo() {
     document.getElementById("todo-link").value = `${window.location.href}todo/${id}`;
 }
 
+async function deleteTodo() {
+    // Get data and save
+    let res = await fetch('./api/v1/todo/' + id, {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'DELETE',
+    });
+    location.href = '.';
+}
+
 async function updateTodo() {
     // Get data and save
     let res = await fetch('./api/v1/todo', {
@@ -67,12 +76,18 @@ async function updateTodo() {
     });
 }
 
+
+async function delete_task(event) {
+    document.getElementById(event.target.id.replace("delete-task-button-", "task-div-")).remove();
+}
+
 async function add_task() {
     // Other shit
     // await updateTodo();
     let task_input = document.createElement("input");
     let task_checkbox = document.createElement("input");
     let task_button = document.createElement("button");
+    let delete_button = document.createElement("button");
 
     task_input.type = "text";
     task_input.className = "task-text";
@@ -86,6 +101,14 @@ async function add_task() {
     task_button.id = "add-task-button";
     task_button.innerHTML = "+";
     task_button.addEventListener('click', add_task, true);
+
+    delete_button.className = "delete-task-button";
+    delete_button.type = "button";
+    delete_button.id = "delete-task-button-" + num_tasks;
+    delete_button.innerHTML = "-";
+    delete_button.addEventListener('click', delete_task, true);
+
+    document.getElementById('task-div-' + num_tasks).appendChild(delete_button);
 
     document.getElementById('last-active-input').removeEventListener('keyup', add_task, true);
     document.getElementById('last-active-input').id = "task-input-" + num_tasks;
@@ -112,10 +135,14 @@ async function add_task() {
 }
 
 addEventListener('load', prefill_title_date, true);
+
 add_task_button.addEventListener('click', add_task, true);
+document.getElementById('delete-button').addEventListener('click', delete_task, true);
+
 last_active_input.addEventListener('keyup', (event) => {
     if (event.code == "Enter" && last_active_input == document.activeElement) add_task();
 }, true);
+
 document.getElementById('save-button').addEventListener('click', updateTodo, true);
 
 document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => {
@@ -129,3 +156,5 @@ document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => 
     console.log(document.execCommand("copy"));
     console.log('oook');
 }, true);
+
+document.getElementById('delete-button').addEventListener('click', deleteTodo, true);
