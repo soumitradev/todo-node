@@ -8,6 +8,8 @@ var num_tasks = 0;
 var pageURL = window.location.href;
 var id = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 
+document.getElementById('custom-link-prefix').innerHTML = window.location.href.replace(id, "");
+
 async function getTodo() {
     document.getElementById("todo-link").value = window.location.href;
     // Get data and save
@@ -65,7 +67,7 @@ async function getTodo() {
     // Get details of todo and display
 }
 
-async function generatePayload() {
+async function generatePayload(newID) {
     let listItems = document.querySelector(".task-list").children;
     let tasks = [];
     for (let i = 0; i < listItems.length; i++) {
@@ -85,7 +87,20 @@ async function generatePayload() {
         tasks: tasks,
         id: id,
     }
+
+    if (newID) {
+        payload.nid = newID;
+    }
     return payload;
+}
+
+async function moveTodo(newID) {
+    // Get data and save
+    let res = await fetch('../api/v1/todo', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'PUT',
+        body: JSON.stringify(await generatePayload(newID)),
+    });
 }
 
 async function updateTodo() {
@@ -93,7 +108,7 @@ async function updateTodo() {
     let res = await fetch('../api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
-        body: JSON.stringify(await generatePayload()),
+        body: JSON.stringify(await generatePayload(false)),
     });
 }
 
@@ -167,3 +182,9 @@ document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => 
 }, true);
 
 document.getElementById('delete-button').addEventListener('click', deleteTodo, true);
+
+document.getElementById('copy-custom-link-btn').addEventListener('click', async (ev) => {
+    let nid = document.getElementById('custom-link').value;
+    await moveTodo(nid);
+    window.location.href = document.getElementById('custom-link-prefix').innerHTML + nid;
+}, true);

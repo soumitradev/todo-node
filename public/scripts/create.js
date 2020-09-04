@@ -5,6 +5,8 @@ var id = undefined;
 
 var num_tasks = 1;
 
+document.getElementById('custom-link-prefix').innerHTML = window.location.href + "todo/";
+
 async function prefill_title_date() {
     await new Promise(r => setTimeout(r, 3000));
     let today = new Date();
@@ -18,7 +20,7 @@ async function prefill_title_date() {
     await createTodo();
 }
 
-async function generatePayload(updating) {
+async function generatePayload(updating, newID) {
     let listItems = document.querySelector(".task-list").children;
     let tasks = [];
     for (let i = 0; i < listItems.length; i++) {
@@ -42,6 +44,10 @@ async function generatePayload(updating) {
         payload.id = id;
     }
 
+    if (updating && newID) {
+        payload.nid = newID;
+    }
+
     return payload;
 }
 
@@ -50,7 +56,7 @@ async function createTodo() {
     let res = await fetch('./api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
-        body: JSON.stringify(await generatePayload(false)),
+        body: JSON.stringify(await generatePayload(false, false)),
     });
     js = await res.json();
     id = js._id;
@@ -67,12 +73,21 @@ async function deleteTodo() {
     location.href = '.';
 }
 
+async function moveTodo(newID) {
+    // Get data and save
+    let res = await fetch('../api/v1/todo', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'PUT',
+        body: JSON.stringify(await generatePayload(true, newID)),
+    });
+}
+
 async function updateTodo() {
     // Get data and save
     let res = await fetch('./api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
-        body: JSON.stringify(await generatePayload(true)),
+        body: JSON.stringify(await generatePayload(true, false)),
     });
 }
 
@@ -158,3 +173,9 @@ document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => 
 }, true);
 
 document.getElementById('delete-button').addEventListener('click', deleteTodo, true);
+
+document.getElementById('copy-custom-link-btn').addEventListener('click', async (ev) => {
+    let nid = document.getElementById('custom-link').value;
+    await moveTodo(nid);
+    window.location.href = document.getElementById('custom-link-prefix').innerHTML + nid;
+}, true);

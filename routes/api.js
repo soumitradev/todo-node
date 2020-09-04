@@ -5,6 +5,8 @@ const api_endpoints = require('../api/endpoints');
 
 router.get('/', api_endpoints.home_get);
 
+router.get('/todos', api_endpoints.get_all);
+
 router.post('/todo', api_endpoints.create_todo);
 router.get('/todo/:id', api_endpoints.get_todo);
 router.put('/todo', api_endpoints.update_todo);

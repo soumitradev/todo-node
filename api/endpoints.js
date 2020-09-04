@@ -54,11 +54,30 @@ exports.get_todo = async function get_todo(req, res) {
     }
 }
 
+
+exports.get_all = async function get_all(req, res) {
+    try {
+        const doc = await todoModel.find({});
+        res.status(200).json(doc);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+}
+
 exports.update_todo = async function update_todo(req, res) {
     let title = req.body.title;
     let desc = req.body.desc;
     let tasks = req.body.tasks;
     let id = req.body.id;
+
+    if (req.body.nid && await todoModel.findById(req.body.nid)) {
+        return res.status(400).json({
+            status: 'error',
+            error: 'id already taken',
+        });
+    }
+    
+    let nid = req.body.nid ? req.body.nid : id;
 
     try {
         const doc = await todoModel.findById(id);
@@ -72,15 +91,15 @@ exports.update_todo = async function update_todo(req, res) {
             title: title,
             desc: desc,
             tasks: tasks,
-            _id: id,
+            _id: nid,
         });
-        upd = await doc.updateOne(todo);
+        await todoModel.findByIdAndDelete(id);
+        upd = await todo.save();
         res.status(200).json(todo);
     } catch (err) {
         return res.status(500).json(err);
     }
 }
-
 
 exports.delete_todo = async function delete_todo(req, res) {
     let id = req.params.id;
