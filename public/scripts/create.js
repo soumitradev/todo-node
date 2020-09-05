@@ -8,7 +8,6 @@ var num_tasks = 1;
 document.getElementById('custom-link-prefix').innerHTML = window.location.href + "todo/";
 
 async function prefill_title_date() {
-    await new Promise(r => setTimeout(r, 3000));
     let today = new Date();
     let mnthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let year = today.getFullYear();
@@ -33,11 +32,13 @@ async function generatePayload(updating, newID) {
     }
     title = document.getElementById("todo-title-input").value;
     desc = document.getElementById("todo-desc-input").value;
+    let priv = document.getElementById("private-checkbox").checked;
 
     payload = {
         title: title,
         desc: desc,
         tasks: tasks,
+        private: priv,
     }
 
     if (updating && id) {
@@ -53,20 +54,19 @@ async function generatePayload(updating, newID) {
 
 async function createTodo() {
     // Get data and save
-    let res = await fetch('./api/v1/todo', {
+    let res = await fetch('/api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
         body: JSON.stringify(await generatePayload(false, false)),
     });
     js = await res.json();
     id = js._id;
-    console.log(id);
     document.getElementById("todo-link").value = `${window.location.href}todo/${id}`;
 }
 
 async function deleteTodo() {
     // Get data and save
-    let res = await fetch('./api/v1/todo/' + id, {
+    let res = await fetch('/api/v1/todo/' + id, {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'DELETE',
     });
@@ -75,7 +75,7 @@ async function deleteTodo() {
 
 async function moveTodo(newID) {
     // Get data and save
-    let res = await fetch('../api/v1/todo', {
+    let res = await fetch('/api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
         body: JSON.stringify(await generatePayload(true, newID)),
@@ -84,7 +84,7 @@ async function moveTodo(newID) {
 
 async function updateTodo() {
     // Get data and save
-    let res = await fetch('./api/v1/todo', {
+    let res = await fetch('/api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
         body: JSON.stringify(await generatePayload(true, false)),
@@ -166,10 +166,8 @@ document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => 
     copyText.focus();
     copyText.select();
     copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+    document.execCommand("copy");
 
-    /* Copy the text inside the text field */
-    console.log(document.execCommand("copy"));
-    console.log('oook');
 }, true);
 
 document.getElementById('delete-button').addEventListener('click', deleteTodo, true);

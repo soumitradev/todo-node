@@ -8,34 +8,59 @@
 </head>
 
 <body>
-  <h1><a href="../../">Todo</a></h1>
+  <div class="heading">
+    <div class="header">
+      <%- include('header.ejs') %>
+    </div>
+    <h3 class="page-title">View/Edit Todo</h3>
+  </div>
   <div class="todo-landing-card">
     <form action="/api/v1/todo" method="PUT" class="todo-form" id="landing-todo">
       <div class="title-div">
-        <label for="todo-title-input">Title</label><br>
-        <input id="todo-title-input" placeholder="Add Title..." type="text">
-      </div><br>
+        <div class="title-label-div">
+          <label for="todo-title-input">Title</label>
+        </div>
+        <div class="title-input-div">
+          <input name="title" id="todo-title-input" placeholder="Add Title..." type="text">
+        </div>
+      </div>
       <div class="desc-div">
-        <label for="todo-title-input">Description</label><br>
-        <input id="todo-desc-input" placeholder="Description..." type="text">
+        <div class="desc-label-div">
+          <label for="todo-title-input">Description</label>
+        </div>
+        <div class="title-input-div">
+          <input name="desc" id="todo-desc-input" placeholder="Description..." type="text">
+        </div>
       </div>
       <div class="tasks">
         <ul class="task-list">
         </ul>
       </div>
+      <div>
+        <input type="checkbox" class="private-checkbox" id="private-checkbox"><label
+          for="private-checkbox">Private</span></label>
+      </div>
       <button type="button" class="save-button" id="save-button">Save</button>
       <button type="button" class="delete-button" id="delete-button">Delete</button>
-    </form><br><br>
+    </form>
     <div class="link-div">
-      <input type="text" id="todo-link" class="copy-link-field" readonly><button type="button" class="copy-link-btn"
-        id="copy-todo-link-btn">Copy Link</button><br><br>
-      <span id="custom-link-prefix"></span><input type="text" id="custom-link" class="copy-custom-link-field"><button
-        type="button" class="copy-custom-link-btn" id="copy-custom-link-btn">Set Custom Link</button>
+      <div class="copy-link-div">
+        <input type="text" id="todo-link" class="copy-link-field" readonly
+          placeholder="Generating unique link..."><button type="button" class="copy-link-btn"
+          id="copy-todo-link-btn">Copy Link</button>
+      </div>
+      <div class="custom-link-div">
+        <span id="custom-link-prefix"></span><input type="text" id="custom-link" class="copy-custom-link-field"><button
+          type="button" class="copy-custom-link-btn" id="copy-custom-link-btn">Set Custom Link</button>
+      </div>
     </div>
+    <p>Todos you save as private will not show up on the public list of all todos.</p>
+    <p>Hitting Save will not move the todo to a custom link. You must hit the "Set Custom Link" button to do so.</p>
+  </div>
   </div>
 </body>
-<link rel="stylesheet" type="text/css" href="../styles/fonts.css">
-<link rel="stylesheet" type="text/css" href="../styles/styles.css">
-<script src="../scripts/view.js"></script>
+<link rel="stylesheet" type="text/css" href="/styles/fonts.css">
+<link rel="stylesheet" type="text/css" href="/styles/styles.css">
+<script src="/scripts/view.js"></script>
 
 </html>

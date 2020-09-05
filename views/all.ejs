@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Todos</title>
+</head>
+
+<body>
+  <div class="heading">
+    <div class="header">
+      <%- include('header.ejs') %>
+    </div>
+    <h3 class="page-title">Public Todos</h3>
+  </div>
+  <div id="public-todos-div">
+    <ul>
+      <% if (doc) { %>
+        <% for (todo in doc) { %>
+          <div class="all-todos-todo" style="margin-top:3%">
+            <div class="all-todos-title">
+            <a href="/todo/<%=doc[todo]._id%>" class="title-text"><%=doc[todo].title%></a>
+            </div>
+            <div class="all-todos-desc">
+              <%if (doc[todo].desc) {%>
+                <span class="desc-text"><%=doc[todo].desc%></span>
+              <% } else { %>
+                <span class="no-desc-text">No description</span>
+              <% }; %>
+            </div>
+          </div>
+        <% }; %>
+        <% } else { %>
+        <span>There are no public todos available at this time.</span>
+      <% }; %>
+    </ul>
+  </div>
+</body>
+<link rel="stylesheet" type="text/css" href="/styles/fonts.css">
+<link rel="stylesheet" type="text/css" href="/styles/styles.css">
+
+</html>

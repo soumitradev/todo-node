@@ -13,13 +13,17 @@ document.getElementById('custom-link-prefix').innerHTML = window.location.href.r
 async function getTodo() {
     document.getElementById("todo-link").value = window.location.href;
     // Get data and save
-    let res = await fetch('../api/v1/todo/' + id, {
+    let res = await fetch('/api/v1/todo/' + id, {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'GET',
     });
+
     js = await res.json();
     document.getElementById('todo-title-input').value = js.title;
     document.getElementById('todo-desc-input').value = js.desc;
+
+    document.getElementById("private-checkbox").checked = js.private;
+
     js.tasks.forEach(task => {
         let task_input = document.createElement("input");
         let task_checkbox = document.createElement("input");
@@ -33,7 +37,7 @@ async function getTodo() {
         task_checkbox.checked = task.done;
 
         num_tasks += 1
-        
+
         let task_div = document.createElement("div");
         task_div.className = "task";
 
@@ -81,11 +85,14 @@ async function generatePayload(newID) {
     title = document.getElementById("todo-title-input").value;
     desc = document.getElementById("todo-desc-input").value;
 
+    let priv = document.getElementById("private-checkbox").checked;
+
     payload = {
         title: title,
         desc: desc,
         tasks: tasks,
         id: id,
+        private: priv,
     }
 
     if (newID) {
@@ -96,7 +103,7 @@ async function generatePayload(newID) {
 
 async function moveTodo(newID) {
     // Get data and save
-    let res = await fetch('../api/v1/todo', {
+    let res = await fetch('/api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
         body: JSON.stringify(await generatePayload(newID)),
@@ -105,7 +112,7 @@ async function moveTodo(newID) {
 
 async function updateTodo() {
     // Get data and save
-    let res = await fetch('../api/v1/todo', {
+    let res = await fetch('/api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
         body: JSON.stringify(await generatePayload(false)),
@@ -114,11 +121,11 @@ async function updateTodo() {
 
 async function deleteTodo() {
     // Get data and save
-    let res = await fetch('../api/v1/todo/' + id, {
+    let res = await fetch('/api/v1/todo/' + id, {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'DELETE',
     });
-    location.href = '../..';
+    location.href = '/';
 }
 
 async function add_task() {
@@ -177,8 +184,7 @@ document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => 
     copyText.setSelectionRange(0, 99999); /*For mobile devices*/
 
     /* Copy the text inside the text field */
-    console.log(document.execCommand("copy"));
-    console.log('oook');
+    document.execCommand("copy");
 }, true);
 
 document.getElementById('delete-button').addEventListener('click', deleteTodo, true);

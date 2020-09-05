@@ -13,6 +13,7 @@ exports.create_todo = async function create_todo(req, res) {
     let desc = req.body.desc;
     let tasks = req.body.tasks;
     let id = req.body.id;
+    let priv = req.body.private;
     // User can specify id
     try {
         if (!id) {
@@ -34,6 +35,7 @@ exports.create_todo = async function create_todo(req, res) {
             desc: desc,
             tasks: tasks,
             _id: id,
+            private: priv,
         });
 
         added = await todo.save();
@@ -57,7 +59,7 @@ exports.get_todo = async function get_todo(req, res) {
 
 exports.get_all = async function get_all(req, res) {
     try {
-        const doc = await todoModel.find({});
+        const doc = await todoModel.find({ private: false });
         res.status(200).json(doc);
     } catch (err) {
         return res.status(500).json(err);
@@ -69,6 +71,7 @@ exports.update_todo = async function update_todo(req, res) {
     let desc = req.body.desc;
     let tasks = req.body.tasks;
     let id = req.body.id;
+    let priv = req.body.private;
 
     if (req.body.nid && await todoModel.findById(req.body.nid)) {
         return res.status(400).json({
@@ -76,7 +79,7 @@ exports.update_todo = async function update_todo(req, res) {
             error: 'id already taken',
         });
     }
-    
+
     let nid = req.body.nid ? req.body.nid : id;
 
     try {
@@ -86,12 +89,14 @@ exports.update_todo = async function update_todo(req, res) {
         title = title ? title : doc.title;
         desc = desc ? desc : doc.desc;
         tasks = tasks ? tasks : doc.tasks;
+        priv = priv ? priv : doc.private;
 
         let todo = new todoModel({
             title: title,
             desc: desc,
             tasks: tasks,
             _id: nid,
+            private: priv,
         });
         await todoModel.findByIdAndDelete(id);
         upd = await todo.save();

@@ -18,6 +18,7 @@ const todoSchema = new Schema({
     _id: { type: String, required: true },
     title: { type: String, required: true },
     desc: { type: String, required: false },
+    private: { type: Boolean, required: true },
     tasks: [{ type: taskSchema, required: true }],
 });
 
