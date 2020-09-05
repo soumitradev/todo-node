@@ -16,17 +16,18 @@ const homeRouter = require("./routes/indexRouter");
 const expressEjsLayouts = require('express-ejs-layouts');
 
 
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.use('/static', express.static(path.join(__dirname, "public")));
+
 app.use(helmet());
-app.use(morgan('short'));
+app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 app.use("/api/v1/", apiRouter);
 app.use("/", homeRouter);
 app.use(expressEjsLayouts);
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect(`mongodb+srv://soumitradev:${process.env.MONGO_PSWD}@todoapp.0zonn.gcp.mongodb.net/todo_data?retryWrites=true&w=majority`, {
     useNewUrlParser: true,

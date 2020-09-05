@@ -9,7 +9,7 @@ exports.todo_get = async function todo_get(req, res) {
     let id = req.params.id;
     try {
         const doc = await todoModel.findById(id);
-        if (!doc) return res.status(404).render();
+        if (!doc) return res.status(404).render('404');
         return res.render('view');
     } catch (err) {
         return res.status(500).json(err);

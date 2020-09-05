@@ -14,19 +14,13 @@ exports.create_todo = async function create_todo(req, res) {
     let tasks = req.body.tasks;
     let id = req.body.id;
     let priv = req.body.private;
+
     // User can specify id
     try {
         if (!id) {
             id = nanoid(10);
             while (await todoModel.findById(id)) {
                 id = nanoid(10);
-            }
-        } else {
-            if (await todoModel.findById(id)) {
-                return res.status(400).json({
-                    status: 'error',
-                    error: 'id already taken',
-                });
             }
         }
 
@@ -39,9 +33,9 @@ exports.create_todo = async function create_todo(req, res) {
         });
 
         added = await todo.save();
-        res.status(201).json(added);
+        return res.status(201).json(added);
     } catch (err) {
-        res.status(400).json(err);
+        return res.status(400).json(err);
     }
 }
 
@@ -60,7 +54,7 @@ exports.get_todo = async function get_todo(req, res) {
 exports.get_all = async function get_all(req, res) {
     try {
         const doc = await todoModel.find({ private: false });
-        res.status(200).json(doc);
+        return res.status(200).json(doc);
     } catch (err) {
         return res.status(500).json(err);
     }
@@ -73,18 +67,23 @@ exports.update_todo = async function update_todo(req, res) {
     let id = req.body.id;
     let priv = req.body.private;
 
-    if (req.body.nid && await todoModel.findById(req.body.nid)) {
-        return res.status(400).json({
-            status: 'error',
-            error: 'id already taken',
-        });
-    }
-
     let nid = req.body.nid ? req.body.nid : id;
 
     try {
         const doc = await todoModel.findById(id);
-        if (!doc) return res.status(404).json({ message: 'Todo list not found' });
+        console.log(doc);
+        if (!doc) {
+            let todo = new todoModel({
+                title: title,
+                desc: desc,
+                tasks: tasks,
+                _id: id,
+                private: priv,
+            });
+
+            added = await todo.save();
+            return res.status(201).json(added);
+        }
 
         title = title ? title : doc.title;
         desc = desc ? desc : doc.desc;
@@ -98,11 +97,13 @@ exports.update_todo = async function update_todo(req, res) {
             _id: nid,
             private: priv,
         });
-        await todoModel.findByIdAndDelete(id);
+        if (!await todoModel.findById(nid)) {
+            await todoModel.findByIdAndDelete(id);
+        }
         upd = await todo.save();
-        res.status(200).json(todo);
+        return res.status(200).json(todo);
     } catch (err) {
-        return res.status(500).json(err);
+        return res.status(400).json(err);
     }
 }
 

@@ -48,12 +48,12 @@ async function generatePayload(updating, newID) {
     if (updating && newID) {
         payload.nid = newID;
     }
+    console.log(payload);
 
     return payload;
 }
 
 async function createTodo() {
-    // Get data and save
     let res = await fetch('/api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
@@ -70,25 +70,24 @@ async function deleteTodo() {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'DELETE',
     });
-    location.href = '.';
-}
-
-async function moveTodo(newID) {
-    // Get data and save
-    let res = await fetch('/api/v1/todo', {
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        method: 'PUT',
-        body: JSON.stringify(await generatePayload(true, newID)),
-    });
+    location.href = '/';
 }
 
 async function updateTodo() {
     // Get data and save
+    let newID = document.getElementById('custom-link').value;
     let res = await fetch('/api/v1/todo', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'PUT',
-        body: JSON.stringify(await generatePayload(true, false)),
+        body: JSON.stringify(await generatePayload(true, newID ? newID : false)),
     });
+
+    if (res.status === 400) {
+        document.getElementById('custom-link').setCustomValidity("That id is already taken");
+    } else {
+        document.getElementById('custom-link').setCustomValidity("");
+    }
+    return res;
 }
 
 
@@ -106,7 +105,9 @@ async function add_task() {
 
     task_input.type = "text";
     task_input.className = "task-text";
-    task_input.placeholder = "Task";
+    task_input.placeholder = "Add Task...";
+    task_input.minLength = 0;
+    task_input.maxLength = 200;
 
     task_checkbox.type = "checkbox";
     task_checkbox.className = "task-check";
@@ -158,7 +159,12 @@ last_active_input.addEventListener('keyup', (event) => {
     if (event.code == "Enter" && last_active_input == document.activeElement) add_task();
 }, true);
 
-document.getElementById('save-button').addEventListener('click', updateTodo, true);
+document.getElementById('save-button').addEventListener('click', async (ev) => {
+    res = await updateTodo();
+    if (res.status === 200) {
+        window.location.href = document.getElementById('custom-link-prefix').innerHTML + document.getElementById('custom-link').value;
+    }
+}, true);
 
 document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => {
     var copyText = document.getElementById("todo-link");
@@ -171,9 +177,3 @@ document.getElementById('copy-todo-link-btn').addEventListener('click', (ev) => 
 }, true);
 
 document.getElementById('delete-button').addEventListener('click', deleteTodo, true);
-
-document.getElementById('copy-custom-link-btn').addEventListener('click', async (ev) => {
-    let nid = document.getElementById('custom-link').value;
-    await moveTodo(nid);
-    window.location.href = document.getElementById('custom-link-prefix').innerHTML + nid;
-}, true);
