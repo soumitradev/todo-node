@@ -71,8 +71,25 @@ exports.update_todo = async function update_todo(req, res) {
 
     try {
         const doc = await todoModel.findById(id);
-        console.log(doc);
         if (!doc) {
+            if (id) {
+                let todo = new todoModel({
+                    title: title,
+                    desc: desc,
+                    tasks: tasks,
+                    _id: id,
+                    private: priv,
+                });
+
+                added = await todo.save();
+                return res.status(201).json(added);
+            }
+
+            id = nanoid(10);
+            while (await todoModel.findById(id)) {
+                id = nanoid(10);
+            }
+
             let todo = new todoModel({
                 title: title,
                 desc: desc,
@@ -97,10 +114,18 @@ exports.update_todo = async function update_todo(req, res) {
             _id: nid,
             private: priv,
         });
-        if (!await todoModel.findById(nid)) {
+
+        if (id === nid) {
             await todoModel.findByIdAndDelete(id);
+            upd = await todo.save();
+        } else {
+            if (await todoModel.findById(nid)) {
+                upd = await todo.save();
+            } else {
+                await todoModel.findByIdAndDelete(id);
+                upd = await todo.save();
+            }
         }
-        upd = await todo.save();
         return res.status(200).json(todo);
     } catch (err) {
         return res.status(400).json(err);

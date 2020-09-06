@@ -10,7 +10,7 @@ router.get('/todos', frontend.get_all);
 router.get('/todo/:id', frontend.todo_get);
 
 router.use((req, res, next) => {
-    res.render('404');
+    res.status(404).render('404');
 });
 
 module.exports = router;

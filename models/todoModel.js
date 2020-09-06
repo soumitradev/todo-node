@@ -7,12 +7,18 @@ function allowEmpty() {
     return typeof (this.myField) === 'string' ? false : true;
 }
 
+
+function arrayLimit(val) {
+    return val.length <= 100;
+}
+
 // Schemas for tasks
 // TODO move to models
 const taskSchema = new Schema({
     body: {
         type: String,
         required: false,
+        default: '',
         minlength: 0,
         maxlength: 200,
         trim: true,
@@ -41,6 +47,7 @@ const todoSchema = new Schema({
     },
     desc: {
         type: String,
+        default: '',
         required: false,
         minlength: 0,
         maxlength: 400,
@@ -50,10 +57,13 @@ const todoSchema = new Schema({
         type: Boolean,
         required: true,
     },
-    tasks: [{
-        type: taskSchema,
-        required: true
-    }],
+    tasks: {
+        type: [{
+            type: taskSchema,
+            required: true
+        }],
+        validate: [arrayLimit, '{PATH} exceeds the limit of 100']
+    },
 });
 
 const todoModel = mongoose.model('todoList', todoSchema, 'todos');

@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
-
 // Why did I not do this before
 require('dotenv').config()
 
@@ -12,9 +11,9 @@ const port = 3000;
 const app = express();
 
 const apiRouter = require("./routes/api");
+const docsRouter = require("./routes/docsRouter");
 const homeRouter = require("./routes/indexRouter");
 const expressEjsLayouts = require('express-ejs-layouts');
-
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -25,6 +24,7 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 app.use("/api/v1/", apiRouter);
+app.use("/docs/", docsRouter);
 app.use("/", homeRouter);
 app.use(expressEjsLayouts);
 
