@@ -1,10 +1,11 @@
 var todoModel = require("../models/todoModel");
 
-// TODO Move endpoints to routes/
+// Render home page
 exports.home_get = async function home_get(req, res) {
     return res.render('home');
 }
 
+// Render a todo page
 exports.todo_get = async function todo_get(req, res) {
     let id = req.params.id;
     try {
@@ -16,6 +17,7 @@ exports.todo_get = async function todo_get(req, res) {
     }
 }
 
+// Render public todo page
 exports.get_all = async function get_all(req, res) {
     try {
         const doc = await todoModel.find({ private: false });
