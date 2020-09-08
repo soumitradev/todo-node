@@ -8,7 +8,7 @@ title: Overview
 - As of now, usage of this API does NOT require an API key
 - As of now, this API does NOT have any form of Authentication or Ratelimiting
 - This API is CORS enabled (obviously)
-- The endpoints shown use curly brackets ({}) to mark a section of the request URL as replacable using parameters
+- The endpoints shown use curly brackets (`{}`) to mark a section of the request URL as replacable using parameters
 - The content type of the request must be `application/json; charset=utf-8`.
 
 ### Response Codes:
@@ -41,7 +41,7 @@ The only endpoints as of now are:
 
   For POST and PUT requests (to Create and Update todos)
 
-  [Read More](./create-and-update)
+  [Read More](/docs/create-and-update)
 
 - ```
     /api/v1/todo/{id}/
@@ -49,11 +49,11 @@ The only endpoints as of now are:
 
   For GET and DELETE requests (to Read and Delete todos with id `id`)
 
-  [Read More](./read-and-delete)
+  [Read More](/docs/read-and-delete)
 
 - ```
     /api/v1/todos/
   ```
   For the GET request (to Read all public todos)
   
-  [Read More](./read-and-delete)
+  [Read More](/docs//read-and-delete)

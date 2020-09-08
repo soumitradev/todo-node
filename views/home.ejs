@@ -8,62 +8,58 @@
 </head>
 
 <body>
-  <div class="heading">
-    <div class="header">
-      <%- include('header.ejs') %>
-    </div>
-    <h2 class="page-title">Create Todo</h2>
-  </div>
-  <div class="todo-landing-card">
-    <form action="/api/v1/todo" method="PUT" class="todo-form" id="landing-todo">
-      <div class="title-div">
-        <div class="title-label-div">
-          <label for="todo-title-input">Title</label>
+  <div class="hero-image">
+    <div class="content">
+      <div class="heading">
+        <div class="header">
+          <%- include('header.ejs') %>
         </div>
-        <div class="title-input-div">
-          <input name="title" id="todo-title-input" placeholder="Add Title..." type="text" minlength="1"
-            maxlength="100">
-        </div>
+        <h2 class="page-title">Create Todo</h2>
       </div>
-      <div class="desc-div">
-        <div class="desc-label-div">
-          <label for="todo-title-input">Description</label>
-        </div>
-        <div class="title-input-div">
-          <input name="desc" id="todo-desc-input" placeholder="Description..." type="text" minlength="0"
-            maxlength="400">
-        </div>
-      </div>
-      <div class="tasks">
-        <ul class="task-list">
-          <div class="task" id="task-div-1">
-            <input type="checkbox" class="task-check" id="task-checkbox-1"><input type="text" class="task-text"
-              placeholder="Add Task..." id="last-active-input" minlength="0" maxlength="200"><button type="button"
-              class="add-task-button" id="add-task-button">+</button>
+      <div class="todo-landing-card">
+        <form action="/api/v1/todo" method="PUT" class="todo-form" id="landing-todo">
+          <div class="title-div input-div">
+            <input name="title" id="todo-title-input" placeholder="Add Title..." type="text" minlength="1"
+              maxlength="100">
           </div>
-        </ul>
+          <div class="desc-div input-div">
+            <input name="desc" id="todo-desc-input" placeholder="Description..." type="text" minlength="0"
+              maxlength="400">
+          </div>
+          <div class="tasks">
+            <ul class="task-list">
+              <div class="task" id="task-div-1">
+                <input type="checkbox" class="task-check" id="task-checkbox-1"><input type="text" class="task-text"
+                  placeholder="Add Task..." id="last-active-input" minlength="0" maxlength="200"><button type="button"
+                  class="add-task-button" id="add-task-button">+</button>
+              </div>
+            </ul>
+            <div class="custom-link-div">
+              <span id="custom-link-prefix"></span><input type="text" id="custom-link" class="copy-custom-link-field"
+                minlength="1" maxlength="40" pattern="[\w\-]" placeholder="custom_link">
+            </div>
+          </div>
+        </form>
       </div>
-      <div>
-        <input type="checkbox" class="private-checkbox" id="private-checkbox"><label
-          for="private-checkbox">Private</span></label>
-      </div>
-    </form>
-    <div class="link-div">
-      <div class="custom-link-div">
-        <span id="custom-link-prefix"></span><input type="text" id="custom-link" class="copy-custom-link-field"
-          minlength="1" maxlength="40" pattern="[\w\-]" placeholder="custom_link">
-      </div>
-      <div class="copy-link-div">
-        <input type="text" id="todo-link" class="copy-link-field" readonly
-          placeholder="Generating unique link..."><button type="button" class="copy-link-btn"
-          id="copy-todo-link-btn">Copy Link</button>
+      <div class="todo-options">
+        <button type="button" class="delete-button" id="delete-button">Delete</button>
+        <button type="button" class="save-button" id="save-button">Save</button>
+        <div>
+          <input type="checkbox" class="private-checkbox" id="private-checkbox"><label
+            for="private-checkbox">Private</span></label>
+        </div>
+        <div class="link-div">
+          <div class="copy-link-div">
+            <input type="text" id="todo-link" class="copy-link-field" readonly
+              placeholder="Generating unique link..."><button type="button" class="copy-link-btn"
+              id="copy-todo-link-btn">Copy Link</button>
+          </div>
+        </div>
       </div>
     </div>
-    <button type="button" class="save-button" id="save-button">Save</button>
-    <button type="button" class="delete-button" id="delete-button">Delete</button>
-    <p>Todos you save as private will not show up on the public list of all todos.</p>
-    <p>You can save a todo with a custom link so you can find it easily later.</p>
   </div>
+  <!-- <p>Todos you save as private will not show up on the public list of all todos.</p>
+  <p>You can save a todo with a custom link so you can find it easily later.</p> -->
 </body>
 <link rel="stylesheet" type="text/css" href="/static/styles/fonts.css">
 <link rel="stylesheet" type="text/css" href="/static/styles/styles.css">

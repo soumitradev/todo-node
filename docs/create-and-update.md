@@ -20,24 +20,24 @@ The only endpoint that accepts POST requests is the `/api/v1/todo/` endpoint. Ma
 - If creation is not successful, it returns the HTTP response code `400` along with the Mongo error in JSON format as the response body.
 
 <b>Example:</b>
-  
+
 <details>
   <summary><b>Creating a new todo:</b></summary>
 The Request
 
 ```json
 {
-"title": "ok",
-"private": false,
-"tasks": [
+  "title": "ok",
+  "private": false,
+  "tasks": [
     {
-    "body": "test",
-    "done": false
+      "body": "test",
+      "done": false
     },
     {
-    "done": false
+      "done": false
     }
-]
+  ]
 }
 ```
 
@@ -45,23 +45,23 @@ will return the following JSON as the response body with a status code of 201
 
 ```json
 {
-"desc": "",
-"title": "ok",
-"tasks": [
+  "desc": "",
+  "title": "ok",
+  "tasks": [
     {
-    "body": "test",
-    "_id": "5f54903dc3bcbd243dd17fd7",
-    "done": false
+      "body": "test",
+      "_id": "5f54903dc3bcbd243dd17fd7",
+      "done": false
     },
     {
-    "body": "",
-    "_id": "5f54903dc3bcbd243dd17fd8",
-    "done": false
+      "body": "",
+      "_id": "5f54903dc3bcbd243dd17fd8",
+      "done": false
     }
-],
-"_id": "dJwFgdQaVg",
-"private": false,
-"__v": 0
+  ],
+  "_id": "dJwFgdQaVg",
+  "private": false,
+  "__v": 0
 }
 ```
 
@@ -121,8 +121,7 @@ Request:
 
 ```json
 {
-  "title": "okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok0oooooooooooooo00000000o",
-  "id": "ok",
+  "title": "",
   "private": false,
   "tasks": [
     {
@@ -143,21 +142,20 @@ Response (HTTP Status Code: 400):
   "errors": {
     "title": {
       "name": "ValidatorError",
-      "message": "Path `title` (`okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok0oooooooooooooo00000000o`) is longer than the maximum allowed length (100).",
+      "message": "Path `title` is required.",
       "properties": {
-        "message": "Path `title` (`okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok0oooooooooooooo00000000o`) is longer than the maximum allowed length (100).",
-        "type": "maxlength",
-        "maxlength": 100,
+        "message": "Path `title` is required.",
+        "type": "required",
         "path": "title",
-        "value": "okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok0oooooooooooooo00000000o"
+        "value": ""
       },
-      "kind": "maxlength",
+      "kind": "required",
       "path": "title",
-      "value": "okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok0oooooooooooooo00000000o"
+      "value": ""
     }
   },
   "_message": "todoList validation failed",
-  "message": "todoList validation failed: title: Path `title` (`okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok0oooooooooooooo00000000o`) is longer than the maximum allowed length (100)."
+  "message": "todoList validation failed: title: Path `title` is required."
 }
 ```
 
@@ -209,7 +207,6 @@ Response (HTTP Status Code 400):
 
 ---
 
-
 ### PUT
 
 The only endpoint that accepts PUT requests is the `/api/v1/todo/` endpoint. Making a PUT request to this endpoint will either Create a new todo with the information given, or update an existing todo.
@@ -238,11 +235,12 @@ Todos can also be moved from one id to another using the `nid` field that gives 
 In this example, we assume that no such todo exists with id `update`
 
 Request:
+
 ```json
 {
   "title": "old title",
-	"id": "update",
-	"private": true,
+  "id": "update",
+  "private": true,
   "tasks": [
     {
       "done": true,
@@ -257,6 +255,7 @@ Request:
 ```
 
 Response (HTTP Status Code 201):
+
 ```json
 {
   "desc": "",
@@ -289,14 +288,16 @@ Response (HTTP Status Code 201):
 We will update the todo we created in the above example
 
 Request:
+
 ```json
 {
   "title": "new title",
-	"id": "update"
+  "id": "update"
 }
 ```
 
 Response (HTTP Status Code 200):
+
 ```json
 {
   "desc": "",
@@ -327,14 +328,16 @@ Response (HTTP Status Code 200):
   <summary><b>Moving an existing todo to a new id:</b></summary>
 
 Request:
+
 ```json
 {
-	"id": "update",
-	"nid": "update-example"
+  "id": "update",
+  "nid": "update-example"
 }
 ```
 
 Response (HTTP Status Code 200):
+
 ```json
 {
   "desc": "",
@@ -358,24 +361,27 @@ Response (HTTP Status Code 200):
 ```
 
 > Note again how we didn't need to provide the rest of the fields that didn't need to be updated.
+
 </details>
 
 #### Errors:
 
-**Note:** For Schema validation errors when updating or creating a new todo, the errors are same as the Errors documented in the POST request. 
+**Note:** For Schema validation errors when updating or creating a new todo, the errors are same as the Errors documented in the POST request.
 
 <details>
   <summary><b>Moving an existing todo to a new id, if another todo already exists at that new id:</b></summary>
 
 Request:
+
 ```json
 {
-	"id": "update-example",
-	"nid": "existing-id"
+  "id": "update-example",
+  "nid": "existing-id"
 }
 ```
 
 Response (HTTP Status Code 400):
+
 ```json
 {
   "driver": true,
@@ -390,4 +396,5 @@ Response (HTTP Status Code 400):
   }
 }
 ```
+
 </details>

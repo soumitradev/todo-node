@@ -169,7 +169,8 @@ async function add_task() {
     delete_button.innerHTML = "-";
     delete_button.addEventListener('click', delete_task, true);
 
-    document.getElementById('task-div-' + num_tasks).appendChild(delete_button);
+    // document.getElementById('task-div-' + num_tasks).appendChild(delete_button);
+    delete_button.before(document.querySelector(".add-task-button"));
 
     document.getElementById('last-active-input').removeEventListener('keyup', add_task, true);
     document.getElementById('last-active-input').id = "task-input-" + num_tasks;
