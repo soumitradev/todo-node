@@ -216,4 +216,5 @@ input:focus {
   width: fit-content;
   text-align: center;
   border: 0;
+  width: 100%;
 }
