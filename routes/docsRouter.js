@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const mds = require('markdown-serve');
 
+// Use markown-serve to serve docs.
 router.use(mds.middleware({ 
     rootDirectory: path.resolve(__dirname, '../docs'),
     handler: function(markdownFile, req, res, next) {
@@ -11,6 +12,7 @@ router.use(mds.middleware({
     }
 }));
 
+// 404
 router.use((req, res, next) => {
     res.status(404).render('404');
 });

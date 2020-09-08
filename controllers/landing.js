@@ -17,10 +17,10 @@ exports.todo_get = async function todo_get(req, res) {
     }
 }
 
-// Render public todo page
+// Render public todo page (only has the 20 latest todos.)
 exports.get_all = async function get_all(req, res) {
     try {
-        const doc = await todoModel.find({ private: false });
+        const doc = await todoModel.find({ private: false }).limit(20);
         return res.render('all', { doc: doc });
     } catch (err) {
         return res.status(500).json(err);

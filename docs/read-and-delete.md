@@ -51,7 +51,7 @@ Response (HTTP Status Code 200):
       "_id": "5f53576fa8d141c05da694c3",
       "done": true
     },
-    {
+    {n
       "body": "joe",
       "_id": "5f53576fa8d141c05da694c4",
       "done": true
@@ -125,6 +125,70 @@ Response (HTTP Status Code 200):
       {
         "body": "",
         "_id": "5f55e07dfca87336a40e51e6",
+        "done": false
+      }
+    ],
+    "private": false,
+    "__v": 0
+  }
+]
+```
+
+
+**Note:** If no todos are public at the moment, the response is an empty JSON list as shown below.
+
+```json
+[]
+```
+
+</details>
+
+<details>
+  <summary><b>Reading the last `limit` public todos:</b></summary>
+
+The Request is made to `/api/v1/todos/{limit}`.
+
+Here, the limit is set to 2. So, we make a GET request to:
+
+`/api/v1/todos/2`
+
+Response (HTTP Status Code 200):
+
+
+```json
+[
+  {
+    "desc": "",
+    "_id": "custom_id",
+    "title": "test-1",
+    "tasks": [
+      {
+        "body": "test",
+        "_id": "5f55e057fca87336a40e51e1",
+        "done": false
+      },
+      {
+        "body": "",
+        "_id": "5f55e057fca87336a40e51e2",
+        "done": false
+      }
+    ],
+    "private": false,
+    "__v": 0
+  },
+  {
+    "desc": "",
+    "_id": "hNiZ70wwFH",
+    "title": "test-2",
+    "tasks": [
+      {
+        "body": "test",
+        "_id": "5f55e076fca87336a40e51e3",
+        "done": false
+      },
+      {
+        "body": "",
+        "_id": "5f55e076fca87336a40e51e4",
         "done": false
       }
     ],

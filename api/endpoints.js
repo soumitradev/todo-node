@@ -62,6 +62,18 @@ exports.get_todo = async function get_todo(req, res) {
     }
 }
 
+// Get the last 20 public todos.
+exports.get_all_limited = async function get_all_limited(req, res) {
+    let lim = parseInt(req.params.limit);
+    try {
+        const doc = await todoModel.find({ private: false }).limit(lim);
+        return res.status(200).json(doc);
+    } catch (err) {
+        // Catch any internal server error
+        return res.status(500).json(err);
+    }
+}
+
 // Get all public todo lists
 exports.get_all = async function get_all(req, res) {
     try {
