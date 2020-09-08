@@ -4,6 +4,7 @@
   "description": "A simple todo API backend built using Express, MongoDB, and Node.js",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "author": "soumitradev",
