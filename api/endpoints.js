@@ -136,7 +136,7 @@ exports.update_todo = async function update_todo(req, res) {
         title = title ? title : doc.title;
         desc = desc ? desc : doc.desc;
         tasks = tasks ? tasks : doc.tasks;
-        priv = priv ? priv : doc.private;
+        priv = (priv !== undefined) ? priv : doc.private;
 
         let todo = new todoModel({
             title: title,
